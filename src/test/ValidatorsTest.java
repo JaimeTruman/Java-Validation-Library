@@ -1,16 +1,18 @@
 package test;
 
 
-import main.Validations;
-import main.results.Result;
-import main.rules.allrules.classes.InstanceOf;
-import main.rules.allrules.numbers.MaxValue;
-import main.rules.allrules.strings.MaxLength;
-import main.rules.allrules.strings.MinLength;
+import main.ValidatorService;
+import main.results.ValidationResult;
+import main.validators.Validator;
+import main.validators.allvalidators.classes.InstanceOf;
+import main.validators.allvalidators.numbers.MaxValue;
+import main.validators.allvalidators.strings.MaxLength;
+import main.validators.allvalidators.strings.MinLength;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ValidatorsTest {
@@ -28,20 +30,31 @@ public class ValidatorsTest {
     }
 
     @Test
-    public void evaluate () {
-        Result result = Validations.evaluate("hola soy jaime", minLength, maxLength, instanceOfString);
+    public void validateArrayTest() {
+        ValidationResult result = ValidatorService.validate("hola soy jaime", minLength, maxLength, instanceOfString);
         Assert.assertTrue(result.isSuccessful());
 
-        Result result2 = Validations.evaluate("hola", minLength, maxLength, instanceOfString);
+        ValidationResult result2 = ValidatorService.validate("hola", minLength, maxLength, instanceOfString);
         Assert.assertTrue(result2.isFailed());
     }
 
     @Test
-    public void evaluateAndGetErrors () {
-        List<String> errors = Validations.evaluateAndGetErrors("hola soy jaime", minLength, maxLength, instanceOfString);
+    public void validateCollectionTest() {
+        List<Validator> validators = Arrays.asList(minLength, maxLength, instanceOfString);
+
+        ValidationResult result = ValidatorService.validate("hola soy jaime", validators);
+        Assert.assertTrue(result.isSuccessful());
+
+        ValidationResult result2 = ValidatorService.validate("hola", validators);
+        Assert.assertTrue(result2.isFailed());
+    }
+
+    @Test
+    public void validateAndGetErrorsTest() {
+        List<String> errors = ValidatorService.validateAndGetErrors("hola soy jaime", minLength, maxLength, instanceOfString);
         Assert.assertTrue(errors.isEmpty());
 
-        List<String> errors2 = Validations.evaluateAndGetErrors("hola", minLength, maxLength, instanceOfString, maxValue);
+        List<String> errors2 = ValidatorService.validateAndGetErrors("hola", minLength, maxLength, instanceOfString, maxValue);
         Assert.assertEquals(2, errors2.size());
     }
 }
