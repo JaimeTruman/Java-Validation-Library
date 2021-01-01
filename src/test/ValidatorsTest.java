@@ -2,12 +2,12 @@ package test;
 
 
 import main.ValidatorService;
-import main.results.ValidationResult;
+import main.ValidationResult;
 import main.validators.Validator;
-import main.validators.allvalidators.classes.InstanceOf;
-import main.validators.allvalidators.numbers.MaxValue;
-import main.validators.allvalidators.strings.MaxLength;
-import main.validators.allvalidators.strings.MinLength;
+import main.validators.classes.InstanceOf;
+import main.validators.numbers.MaxValue;
+import main.validators.strings.MaxLength;
+import main.validators.strings.MinLength;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

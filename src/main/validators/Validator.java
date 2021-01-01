@@ -1,7 +1,7 @@
 package main.validators;
 
 
-import main.results.ValidationResult;
+import main.ValidationResult;
 
 public interface Validator {
     String getMessageOnFailed();

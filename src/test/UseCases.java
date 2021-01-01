@@ -2,11 +2,11 @@ package test;
 
 
 import main.ValidatorService;
-import main.results.ValidationResult;
-import main.validators.allvalidators.numbers.MaxValue;
-import main.validators.allvalidators.numbers.MinValue;
-import main.validators.allvalidators.numbers.NaturalNumber;
-import main.validators.allvalidators.numbers.Number;
+import main.ValidationResult;
+import main.validators.numbers.MaxValue;
+import main.validators.numbers.MinValue;
+import main.validators.numbers.NaturalNumber;
+import main.validators.numbers.Number;
 import org.junit.Assert;
 import org.junit.Test;
 

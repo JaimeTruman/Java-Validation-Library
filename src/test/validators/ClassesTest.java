@@ -1,8 +1,8 @@
 package test.validators;
 
 import main.ValidatorService;
-import main.results.ValidationResult;
-import main.validators.allvalidators.classes.InstanceOf;
+import main.ValidationResult;
+import main.validators.classes.InstanceOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

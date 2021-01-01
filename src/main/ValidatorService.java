@@ -1,6 +1,5 @@
 package main;
 
-import main.results.ValidationResult;
 import main.validators.Validator;
 
 import java.util.ArrayList;

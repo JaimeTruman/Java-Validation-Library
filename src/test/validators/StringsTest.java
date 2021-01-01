@@ -1,11 +1,11 @@
 package test.validators;
 
 import main.ValidatorService;
-import main.results.ValidationResult;
-import main.validators.allvalidators.strings.IncludeCharacters;
-import main.validators.allvalidators.strings.Matches;
-import main.validators.allvalidators.strings.MaxLength;
-import main.validators.allvalidators.strings.MinLength;
+import main.ValidationResult;
+import main.validators.strings.IncludeCharacters;
+import main.validators.strings.Matches;
+import main.validators.strings.MaxLength;
+import main.validators.strings.MinLength;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
