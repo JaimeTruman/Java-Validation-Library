@@ -1,7 +1,7 @@
 package test.validators;
 
-import main.ValidatorService;
 import main.ValidationResult;
+import main.ValidatorService;
 import main.validators.strings.IncludeCharacters;
 import main.validators.strings.Matches;
 import main.validators.strings.MaxLength;

@@ -1,7 +1,7 @@
 package test.validators;
 
-import main.ValidatorService;
 import main.ValidationResult;
+import main.ValidatorService;
 import main.validators.numbers.*;
 import main.validators.numbers.Number;
 import org.junit.Assert;

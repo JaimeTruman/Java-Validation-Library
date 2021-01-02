@@ -1,8 +1,8 @@
 package test;
 
 
-import main.ValidatorService;
 import main.ValidationResult;
+import main.ValidatorService;
 import main.validators.Validator;
 import main.validators.classes.InstanceOf;
 import main.validators.numbers.MaxValue;
@@ -54,7 +54,16 @@ public class ValidatorsTest {
         List<String> errors = ValidatorService.validateAndGetErrors("hola soy jaime", minLength, maxLength, instanceOfString);
         Assert.assertTrue(errors.isEmpty());
 
-        List<String> errors2 = ValidatorService.validateAndGetErrors("hola", minLength, maxLength, instanceOfString, maxValue);
+        List<String> errors2 = ValidatorService.validateAndGetErrors("hola", Arrays.asList(minLength, maxLength, instanceOfString, maxValue));
         Assert.assertEquals(2, errors2.size());
+    }
+
+    @Test
+    public void startValidatingAndValidateAll () {
+        List<String> errors = ValidatorService.startValidating("hola", minLength.of(1), maxLength.of(10)).and("hola2", minLength.of(10)).validateAllAndGetErrors();
+        Assert.assertEquals(1, errors.size());
+
+        ValidationResult result = ValidatorService.startValidating("hola", minLength.of(10), maxLength.of(10)).and("hola2", minLength.of(10)).validateAll();
+        Assert.assertTrue(result.isFailed());
     }
 }

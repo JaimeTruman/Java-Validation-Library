@@ -1,7 +1,7 @@
 package test.validators;
 
-import main.ValidatorService;
 import main.ValidationResult;
+import main.ValidatorService;
 import main.validators.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
