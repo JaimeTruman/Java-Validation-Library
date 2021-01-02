@@ -41,7 +41,7 @@ public class Matches implements Validator {
             else
                 return ValidationResult.failed(messageOnFailed);
 
-        }catch (ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

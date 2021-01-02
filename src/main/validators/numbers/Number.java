@@ -21,7 +21,7 @@ public class Number implements Validator {
              Double.parseDouble(element.toString());
 
             return ValidationResult.success();
-        }catch (NumberFormatException | ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

@@ -37,7 +37,7 @@ public class Different implements Validator {
             int  numberToCompare = Integer.parseInt(object.toString());
 
             return numberToCompare != numberToBeDifferent ? ValidationResult.success() : ValidationResult.failed(messageOnFailed);
-        }catch (NumberFormatException | ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

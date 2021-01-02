@@ -1,8 +1,10 @@
 package main;
 
+import javafx.util.Pair;
 import main.validators.Validator;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Class design to validate the elements
@@ -35,6 +37,26 @@ public final class ValidatorService {
      */
     public static<E> ValidationResult validate(E element, Collection<? extends Validator> validators) {
         return validate(element, (Validator[]) validators.toArray());
+    }
+
+    /**
+     * Sometimes you want to validate an element but when your put the element in the method it may throw and exception.
+     * For example an array when you want to validate the index n but the max array index is n - 1. To prevent that situations
+     * you can use this method.
+     * @param supplier The supplier which return the element accessed
+     * @param messageOnException If when the supplier is executed throws an exception, the method will return a failed ValidationResult
+     *                           with the messageOnException
+     * @param validators The validators that will be executed if the supplier doesnt throw any exception
+     * @return the result of the validation
+     */
+    public static ValidationResult validateMayThrowException (Supplier<?> supplier, String messageOnException, Validator... validators) {
+        try {
+            Object element = supplier.get();
+
+            return validate(element, validators);
+        }catch (Exception e) {
+            return ValidationResult.failed(messageOnException);
+        }
     }
 
     /**
@@ -110,9 +132,11 @@ public final class ValidatorService {
     public static class ValidationsBuilder {
         // key: element, value: its validators
         private Map<Object, List<Validator>> elementsValidations;
+        private Pair<Boolean, ValidationResult> thereIsAlreadyAnError;
 
         protected ValidationsBuilder(Map<Object, List<Validator>> elementsValidations) {
             this.elementsValidations = elementsValidations;
+            this.thereIsAlreadyAnError = new Pair<>(false, ValidationResult.success());
         }
 
         /**
@@ -121,7 +145,7 @@ public final class ValidatorService {
          * @param validators of the element. It can be any collections which contains validators
          * @return ValidationsBuilder to chain more validations or start validating
          */
-        public ValidationsBuilder and (Object element, Collection<? extends Validator> validators) {
+        public ValidationsBuilder and(Object element, Collection<? extends Validator> validators) {
             List<Validator> validatorList = new ArrayList<>(validators);
             this.elementsValidations.put(element, validatorList);
 
@@ -131,9 +155,25 @@ public final class ValidatorService {
         /**
          * This is the same as the method above. The only difference is that it takes an array of validators
          */
-        public ValidationsBuilder and (Object element, Validator... validators) {
+        public ValidationsBuilder and(Object element, Validator... validators) {
             List<Validator> validatorList = Arrays.asList(validators);
             this.elementsValidations.put(element, validatorList);
+
+            return this;
+        }
+
+        /**
+         * Is the same as the method validateMayThrowException() in ValidatorService
+         */
+        public ValidationsBuilder andMayThrowException(Supplier<?> mayThrowExceptionSupplier, String messageOnExpcetion, Validator... validators) {
+            try {
+                Object element = mayThrowExceptionSupplier.get();
+                List<Validator> validatorList = Arrays.asList(validators);
+
+                this.elementsValidations.put(element, validatorList);
+            }catch (Exception e) {
+                this.thereIsAlreadyAnError = new Pair<>(Boolean.TRUE, ValidationResult.failed(messageOnExpcetion));
+            }
 
             return this;
         }
@@ -144,6 +184,10 @@ public final class ValidatorService {
          * @return ValidationResult of the first element that fails the validation
          */
         public ValidationResult validateAll () {
+            if(isAlreadyAnException()){
+                return ValidationResult.failed(this.getMessageException());
+            }
+
             Object element;
             List<Validator> validatorsToObject;
 
@@ -169,6 +213,10 @@ public final class ValidatorService {
          * @return List<String> of the error messages. If all the validations have passed it return an empty arryalist
          */
         public List<String> validateAllAndGetErrors () {
+            if(isAlreadyAnException()){
+                return Collections.singletonList(getMessageException());
+            }
+
             List<String> messageErrors = new ArrayList<>();
 
             Object element;
@@ -188,6 +236,14 @@ public final class ValidatorService {
             }
 
             return messageErrors;
+        }
+
+        private boolean isAlreadyAnException () {
+            return this.thereIsAlreadyAnError.getKey();
+        }
+
+        private String getMessageException () {
+            return this.thereIsAlreadyAnError.getValue().getMessage();
         }
     }
 }

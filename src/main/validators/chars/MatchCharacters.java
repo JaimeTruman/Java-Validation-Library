@@ -54,7 +54,7 @@ public class MatchCharacters implements Validator {
             }
 
             return ValidationResult.failed(messageOnFailed);
-        }catch (ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

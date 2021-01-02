@@ -26,7 +26,7 @@ public class PositiveNumber implements Validator {
             else
                 return ValidationResult.failed(messageOnFailed);
 
-        }catch (NumberFormatException | ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

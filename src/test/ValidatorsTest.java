@@ -59,7 +59,27 @@ public class ValidatorsTest {
     }
 
     @Test
-    public void startValidatingAndValidateAll () {
+    public void validateMayThrowException () {
+        int[] array = new int[]{1, 2, 3};
+
+        ValidationResult result = ValidatorService.validateMayThrowException(() -> array[4], "error", minLength.of(1));
+        Assert.assertTrue(result.isFailed());
+    }
+
+    @Test
+    public void validateMayThrowExceptionValidatorBuilderTest() {
+        int[] array = new int[]{1, 2, 3};
+
+        ValidationResult result = ValidatorService.startValidating("hola", minLength.of(1))
+                .andMayThrowException(() -> array[3], "exception", minLength.of(1))
+                .validateAll();
+
+        Assert.assertTrue(result.isFailed());
+        Assert.assertEquals("exception", result.getMessage());
+    }
+
+    @Test
+    public void startValidatingAndValidateAllTest() {
         List<String> errors = ValidatorService.startValidating("hola", minLength.of(1), maxLength.of(10)).and("hola2", minLength.of(10)).validateAllAndGetErrors();
         Assert.assertEquals(1, errors.size());
 

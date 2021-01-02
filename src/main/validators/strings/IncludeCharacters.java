@@ -57,7 +57,7 @@ public class IncludeCharacters implements Validator {
             }
 
             return ValidationResult.success();
-        }catch (ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

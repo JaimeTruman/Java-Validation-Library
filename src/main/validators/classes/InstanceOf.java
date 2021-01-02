@@ -37,7 +37,7 @@ public class InstanceOf implements Validator {
         try {
             return classToCheck.isInstance(object) ? ValidationResult.success() : ValidationResult.failed(messageOnFailed);
 
-        }catch (ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }

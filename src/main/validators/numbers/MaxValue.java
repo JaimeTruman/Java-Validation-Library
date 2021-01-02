@@ -41,7 +41,7 @@ public class MaxValue implements Validator {
             }else{
                 return ValidationResult.success();
             }
-        }catch (NumberFormatException | ClassCastException e) {
+        }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }
     }
