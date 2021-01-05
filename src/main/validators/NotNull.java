@@ -3,7 +3,7 @@ package main.validators;
 import main.ValidationResult;
 
 public class NotNull implements Validator {
-    private final String messageOnFailed;
+    private String messageOnFailed;
 
     public NotNull(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
@@ -17,5 +17,9 @@ public class NotNull implements Validator {
     @Override
     public ValidationResult check(Object object) {
         return object == null ? ValidationResult.failed(messageOnFailed) : ValidationResult.success();
+    }
+
+    public NotNull message (String messageOnFailed) {
+        return new NotNull(messageOnFailed);
     }
 }

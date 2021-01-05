@@ -2,10 +2,7 @@ package test.validators;
 
 import main.ValidationResult;
 import main.ValidatorService;
-import main.validators.strings.IncludeCharacters;
-import main.validators.strings.Matches;
-import main.validators.strings.MaxLength;
-import main.validators.strings.MinLength;
+import main.validators.strings.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +53,26 @@ public class StringsTest {
         Assert.assertTrue(result.isSuccessful());
 
         ValidationResult result2 = ValidatorService.validate("a", minLength);
+        Assert.assertTrue(result2.isFailed());
+    }
+
+    @Test
+    public void equalsIgnoreCaseTest() {
+        EqualsIgnoreCase equalsIgnoreCase = new EqualsIgnoreCase("error");
+        ValidationResult result = ValidatorService.validate("hola", equalsIgnoreCase.of("hola"));
+        Assert.assertTrue(result.isSuccessful());
+
+        ValidationResult result2 = ValidatorService.validate("hola", equalsIgnoreCase.of("hoñ"));
+        Assert.assertTrue(result2.isFailed());
+    }
+
+    @Test
+    public void notEqualsIgnoreCaseTest() {
+        NotEqualsIgnoreCase equalsIgnoreCase = new NotEqualsIgnoreCase("error");
+        ValidationResult result = ValidatorService.validate("hola", equalsIgnoreCase.of("12"));
+        Assert.assertTrue(result.isSuccessful());
+
+        ValidationResult result2 = ValidatorService.validate("hola", equalsIgnoreCase.of("hola"));
         Assert.assertTrue(result2.isFailed());
     }
 }
