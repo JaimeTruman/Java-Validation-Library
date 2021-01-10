@@ -24,6 +24,10 @@ public class NotEqualsIgnoreCase implements Validator {
         return new NotEqualsIgnoreCase(word, messageOnFailed);
     }
 
+    public String getWord() {
+        return word;
+    }
+
     @Override
     public String getMessageOnFailed() {
         return messageOnFailed;
@@ -31,7 +35,7 @@ public class NotEqualsIgnoreCase implements Validator {
 
     @Override
     public ValidationResult check(Object object) {
-        try{
+        try{;
             String wordToCheck = (String) object;
 
             return wordToCheck.equalsIgnoreCase(word) ? ValidationResult.failed(messageOnFailed) : ValidationResult.success();

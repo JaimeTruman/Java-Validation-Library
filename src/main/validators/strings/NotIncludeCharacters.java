@@ -5,35 +5,35 @@ import main.validators.Validator;
 
 import java.util.Collection;
 
-public class IncludeCharacters implements Validator {
+public class NotIncludeCharacters implements Validator {
     private String messageOnFailed;
     private Character[] characters;
 
-    public IncludeCharacters(Character[] characters, String messageOnFailed) {
+    public NotIncludeCharacters(Character[] characters, String messageOnFailed) {
         this.characters = characters;
         this.messageOnFailed = messageOnFailed;
     }
 
-    public IncludeCharacters(String messageOnFailed) {
+    public NotIncludeCharacters(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
     }
 
-    public IncludeCharacters() { }
+    public NotIncludeCharacters() { }
 
-    public IncludeCharacters of (Character[] characters) {
-        return new IncludeCharacters(characters, messageOnFailed);
+    public NotIncludeCharacters of (Character... characters) {
+        return new NotIncludeCharacters(characters, messageOnFailed);
     }
 
-    public IncludeCharacters of (Collection<? extends Character> characters) {
-        return new IncludeCharacters((Character[]) characters.toArray(), messageOnFailed);
+    public NotIncludeCharacters of (Collection<? extends Character> characters) {
+        return new NotIncludeCharacters((Character[]) characters.toArray(), messageOnFailed);
     }
 
-    public IncludeCharacters of (Character[] characters, String messageOnFailed) {
-        return new IncludeCharacters(characters, messageOnFailed);
+    public NotIncludeCharacters of (String messageOnFailed, Character... characters) {
+        return new NotIncludeCharacters(characters, messageOnFailed);
     }
 
-    public IncludeCharacters of (Collection<? extends Character> characters, String messageOnFailed) {
-        return new IncludeCharacters((Character[]) characters.toArray(), messageOnFailed);
+    public NotIncludeCharacters of (Collection<? extends Character> characters, String messageOnFailed) {
+        return new NotIncludeCharacters((Character[]) characters.toArray(), messageOnFailed);
     }
 
     @Override

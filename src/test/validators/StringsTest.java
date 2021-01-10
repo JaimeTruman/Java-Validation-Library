@@ -17,11 +17,11 @@ public class StringsTest {
 
     @Test
     public void doestIncludeCharactersTest () {
-        IncludeCharacters doesntIncludeCharacters = new IncludeCharacters(new Character[]{'f', 't', 'w'}, "error");
+        NotIncludeCharacters doesntIncludeCharacters = new NotIncludeCharacters(new Character[]{'f', 't', 'w'}, "error");
         ValidationResult result = ValidatorService.validate(textToTest, doesntIncludeCharacters);
         Assert.assertTrue(result.isSuccessful());
 
-        IncludeCharacters doesntIncludeCharacters2 = new IncludeCharacters(new Character[]{'f', 'o', 'w'}, "error");
+        NotIncludeCharacters doesntIncludeCharacters2 = new NotIncludeCharacters(new Character[]{'f', 'o', 'w'}, "error");
         ValidationResult result2 = ValidatorService.validate(textToTest, doesntIncludeCharacters2);
         Assert.assertTrue(result2.isFailed());
     }
@@ -68,11 +68,11 @@ public class StringsTest {
 
     @Test
     public void notEqualsIgnoreCaseTest() {
-        NotEqualsIgnoreCase equalsIgnoreCase = new NotEqualsIgnoreCase("error");
-        ValidationResult result = ValidatorService.validate("hola", equalsIgnoreCase.of("12"));
+        NotEqualsIgnoreCase notEqualsIgnoreCase = new NotEqualsIgnoreCase("error");
+        ValidationResult result = ValidatorService.validate("hola", notEqualsIgnoreCase.of("12"));
         Assert.assertTrue(result.isSuccessful());
 
-        ValidationResult result2 = ValidatorService.validate("hola", equalsIgnoreCase.of("hola"));
+        ValidationResult result2 = ValidatorService.validate("hola", notEqualsIgnoreCase.of("hola"));
         Assert.assertTrue(result2.isFailed());
     }
 }

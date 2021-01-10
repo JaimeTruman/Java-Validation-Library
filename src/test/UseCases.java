@@ -7,6 +7,7 @@ import main.validators.NotNull;
 import main.validators.numbers.*;
 import main.validators.numbers.Number;
 import main.validators.strings.MinLength;
+import main.validators.strings.NotEqualsIgnoreCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,8 +25,8 @@ public class UseCases {
     private final MinValue minValue = new MinValue("Too small");
     private final MinLength minLength = new MinLength("Too small");
     private final NotNull notNull = new NotNull("Not null");
-    private final Different different = new Different("diferente");
     private final Same same = new Same("different");
+    private final NotEqualsIgnoreCase notEqualsIgnoreCase = new NotEqualsIgnoreCase("notEqualsIgnoreCase");
 
     @Test
     public void useCaseNumbers () {
@@ -49,10 +50,9 @@ public class UseCases {
         ValidationResult result = startValidating(args, notNull.message("notNull"))
                 .and(args.length, same.as(2, "diferent"))
                 .andMayThrowException(() -> args[1], "excepcion", positiveNumber)
+                .andMayThrowException(() -> args[1], "excepcion", notEqualsIgnoreCase.of("123"))
                 .validateAll();
 
-        System.out.println(result.getMessage());
-
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.isFailed());
     }
 }

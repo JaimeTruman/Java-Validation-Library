@@ -2,6 +2,8 @@ package main;
 
 import javafx.util.Pair;
 import main.validators.Validator;
+import main.validators.strings.EqualsIgnoreCase;
+import main.validators.strings.NotEqualsIgnoreCase;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -101,7 +103,7 @@ public final class ValidatorService {
     public static ValidationsBuilder startValidating (Object element, Collection<? extends Validator> validators) {
         List<Validator> validatorList = new ArrayList<>(validators);
 
-        Map<Object, List<Validator>> elementsValidations = new HashMap<>();
+        Map<Object, List<Validator>> elementsValidations = new LinkedHashMap<>();
         elementsValidations.put(element, validatorList);
 
         return new ValidationsBuilder(elementsValidations);
@@ -114,9 +116,8 @@ public final class ValidatorService {
     public static ValidationsBuilder startValidating (Object element, Validator... validators) {
         List<Validator> validatorList = Arrays.asList(validators);
 
-        Map<Object, List<Validator>> elementsValidations = new HashMap<>();
+        Map<Object, List<Validator>> elementsValidations = new LinkedHashMap<>();
         elementsValidations.put(element, validatorList);
-
 
         return new ValidationsBuilder(elementsValidations);
     }
@@ -136,7 +137,7 @@ public final class ValidatorService {
 
         protected ValidationsBuilder(Map<Object, List<Validator>> elementsValidations) {
             this.elementsValidations = elementsValidations;
-            this.thereIsAlreadyAnError = new Pair<>(false, ValidationResult.success());
+            this.thereIsAlreadyAnError = new Pair<>(Boolean.FALSE, ValidationResult.success());
         }
 
         /**
@@ -191,7 +192,7 @@ public final class ValidatorService {
             Object element;
             List<Validator> validatorsToObject;
 
-            for(Map.Entry<Object, List<Validator>> entry : elementsValidations.entrySet()){;
+            for(Map.Entry<Object, List<Validator>> entry : elementsValidations.entrySet()){
                 element = entry.getKey();
                 validatorsToObject = entry.getValue();
 
