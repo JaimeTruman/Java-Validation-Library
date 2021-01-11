@@ -6,6 +6,7 @@ import main.ValidatorService;
 import main.validators.Validator;
 import main.validators.classes.InstanceOf;
 import main.validators.numbers.MaxValue;
+import main.validators.numbers.Same;
 import main.validators.strings.MaxLength;
 import main.validators.strings.MinLength;
 import org.junit.Assert;
@@ -14,6 +15,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ValidatorsTest {
     private MaxLength maxLength;
@@ -76,6 +79,17 @@ public class ValidatorsTest {
 
         Assert.assertTrue(result.isFailed());
         Assert.assertEquals("exception", result.getMessage());
+    }
+
+    @Test
+    public void validateAndAsync () {
+        String hola = "hola";
+
+        ValidationResult result = ValidatorService.startValidating(hola, minLength.of(2))
+                .andAsynch(hola::toUpperCase, Executors.newFixedThreadPool(1), "error", minLength.of(2))
+                .validateAll();
+
+        Assert.assertTrue(result.isSuccessful());
     }
 
     @Test

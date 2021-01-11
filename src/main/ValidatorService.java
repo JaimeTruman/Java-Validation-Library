@@ -1,11 +1,13 @@
 package main;
 
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
 import javafx.util.Pair;
 import main.validators.Validator;
 import main.validators.strings.EqualsIgnoreCase;
 import main.validators.strings.NotEqualsIgnoreCase;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
@@ -133,11 +135,11 @@ public final class ValidatorService {
     public static class ValidationsBuilder {
         // key: element, value: its validators
         private Map<Object, List<Validator>> elementsValidations;
-        private Pair<Boolean, ValidationResult> thereIsAlreadyAnError;
+        private Pair<Boolean, String> thereIsAlreadyAnError;
 
         protected ValidationsBuilder(Map<Object, List<Validator>> elementsValidations) {
             this.elementsValidations = elementsValidations;
-            this.thereIsAlreadyAnError = new Pair<>(Boolean.FALSE, ValidationResult.success());
+            this.thereIsAlreadyAnError = new Pair<>(Boolean.FALSE, ValidationResult.success().getMessage());
         }
 
         /**
@@ -164,6 +166,29 @@ public final class ValidatorService {
         }
 
         /**
+         * This method is designed to get he element from a callabe asynchronously executed by the ExecutorService. If there is a exception envolved it saves the error
+         * with the messaga: onExceptionCallable. When its done it saves the element from the callable with its validators as a normal element
+         * @param callable which returns the element
+         * @param executor which executes the callabe
+         * @param onExceptionCallable if an excption is involved when executig the callabe, the error message will be ti.
+         * @param validators the element returned by the callabe will be validated with it
+         * @return ValidationsBuilder to chain more validatins
+         */
+        public ValidationsBuilder andAsynch (Callable<?> callable, ExecutorService executor, String onExceptionCallable, Validator... validators) {
+            try {
+                Future<?> future = executor.submit(callable);
+
+                while (!future.isDone());
+
+                this.elementsValidations.put(future.get(), Arrays.asList(validators));
+            } catch (Exception e) {
+                this.thereIsAlreadyAnError = new Pair<>(Boolean.TRUE, onExceptionCallable);
+            }
+
+            return this;
+        }
+
+        /**
          * Is the same as the method validateMayThrowException() in ValidatorService
          */
         public ValidationsBuilder andMayThrowException(Supplier<?> mayThrowExceptionSupplier, String messageOnExpcetion, Validator... validators) {
@@ -173,7 +198,7 @@ public final class ValidatorService {
 
                 this.elementsValidations.put(element, validatorList);
             }catch (Exception e) {
-                this.thereIsAlreadyAnError = new Pair<>(Boolean.TRUE, ValidationResult.failed(messageOnExpcetion));
+                this.thereIsAlreadyAnError = new Pair<>(Boolean.TRUE, messageOnExpcetion);
             }
 
             return this;
@@ -244,7 +269,7 @@ public final class ValidatorService {
         }
 
         private String getMessageException () {
-            return this.thereIsAlreadyAnError.getValue().getMessage();
+            return this.thereIsAlreadyAnError.getValue();
         }
     }
 }
